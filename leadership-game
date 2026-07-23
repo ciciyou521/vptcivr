@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<meta name="format-detection" content="telephone=no,email=no,address=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="theme-color" content="#1f2a44" />
+<meta name="description" content="领导力修炼局：从管理者到领导者 · 授权与激励情景决策卡牌。微信内打开即可交互游玩。" />
+<meta property="og:title" content="领导力修炼局 · 情景决策卡牌" />
+<meta property="og:description" content="从管理者到领导者 · 授权与激励沙盘。点开即玩，测测你的领导力境界。" />
+<meta property="og:type" content="website" />
+<title>领导力修炼局 · 从管理者到领导者沙盘卡牌</title>
+<style>
+  :root{
+    --navy:#1f2a44; --navy2:#2c3a5e; --gold:#c8a24b; --gold2:#e0bd6e;
+    --teal:#2a9d8f; --teal-d:#1f7a6f; --paper:#f7f4ec; --paper2:#fffdf7;
+    --ink:#2b2b2b; --muted:#6b6b6b; --line:#e3ddcf; --good:#2a9d8f; --warn:#d9772b;
+    --bad:#c0492f; --soft:#fbf8f0;
+    --shadow:0 10px 30px rgba(31,42,68,.14);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:"PingFang SC","Microsoft YaHei","Segoe UI",system-ui,sans-serif;
+    background:linear-gradient(160deg,#eef1f6,#f7f4ec); color:var(--ink); line-height:1.65;
+  }
+  .wrap{max-width:920px; margin:0 auto; padding:22px 16px 60px;}
+  /* Top bar */
+  .topbar{display:flex; align-items:center; gap:12px; margin-bottom:14px;}
+  .logo{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--navy),var(--navy2));
+    color:var(--gold2); display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;box-shadow:var(--shadow);}
+  .brand b{font-size:18px;color:var(--navy);} .brand span{display:block;font-size:12px;color:var(--muted);}
+  .progress-pill{margin-left:auto;font-size:12px;color:var(--muted);background:#fff;border:1px solid var(--line);padding:6px 12px;border-radius:999px;}
+  /* Screens */
+  .screen{display:none;}
+  .screen.active{display:block; animation:fade .35s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  /* Start */
+  .hero{background:linear-gradient(135deg,var(--navy),#33446b); color:#fff; border-radius:18px; padding:34px 30px; box-shadow:var(--shadow); position:relative; overflow:hidden;}
+  .hero h1{margin:0 0 6px; font-size:30px; letter-spacing:1px;}
+  .hero .sub{color:var(--gold2); font-size:14px; letter-spacing:2px; margin-bottom:16px;}
+  .hero p{margin:8px 0; color:#e9edf5; font-size:14.5px; max-width:620px;}
+  .hero .deco{position:absolute; right:-30px; top:-30px; width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(200,162,75,.35),transparent 70%);}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+  .chip{background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.2); color:#fff; font-size:12.5px; padding:6px 11px; border-radius:999px;}
+  .btn{cursor:pointer;border:none;border-radius:12px;padding:13px 22px;font-size:15px;font-weight:700;transition:.2s;font-family:inherit;}
+  .btn-primary{background:linear-gradient(135deg,var(--gold),var(--gold2)); color:#3a2c08; box-shadow:0 6px 16px rgba(200,162,75,.35);}
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-ghost{background:#fff;color:var(--navy);border:1px solid var(--line);}
+  .btn-ghost:hover{border-color:var(--gold);}
+  .btn-row{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap;}
+  /* Card */
+  .card{background:var(--paper2); border:1px solid var(--line); border-radius:18px; padding:24px 24px 22px; box-shadow:var(--shadow); position:relative;}
+  .card-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .tag{font-size:12px; font-weight:700; padding:5px 11px; border-radius:999px; color:#fff;}
+  .t-lead{background:var(--navy);} .t-auth{background:var(--teal-d);} .t-mot{background:var(--warn);}
+  .qcount{margin-left:auto;font-size:12.5px;color:var(--muted);}
+  .situation{background:var(--soft); border-left:4px solid var(--gold); padding:14px 16px; border-radius:10px; font-size:15px; color:#3a3a3a; margin-bottom:14px;}
+  .situation b{color:var(--navy);}
+  .question{font-size:17px;font-weight:700;color:var(--navy);margin:6px 0 16px;}
+  .options{display:flex;flex-direction:column;gap:11px;}
+  .opt{cursor:pointer;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;font-size:14.5px;color:var(--ink);transition:.18s;font-family:inherit;display:flex;gap:12px;align-items:flex-start;}
+  .opt:hover{border-color:var(--gold);background:#fffdf3;transform:translateX(2px);}
+  .opt .num{flex:none;width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:2px;}
+  .opt.locked{cursor:default;}
+  .opt.correct{border-color:var(--good);background:#eefaf7;}
+  .opt.wrong{border-color:var(--bad);background:#fcefe9;}
+  .opt.dim{opacity:.55;}
+  /* Feedback */
+  .feedback{margin-top:18px;border-radius:14px;padding:18px 18px;display:none;animation:fade .3s ease;}
+  .feedback.show{display:block;}
+  .fb-good{background:#eefaf7;border:1px solid #bfe6dc;}
+  .fb-warn{background:#fff5e9;border:1px solid #f3d6ad;}
+  .fb-bad{background:#fcefe9;border:1px solid #f0c9bd;}
+  .fb-title{font-weight:800;font-size:16px;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+  .fb-good .fb-title{color:var(--good);} .fb-warn .fb-title{color:var(--warn);} .fb-bad .fb-title{color:var(--bad);}
+  .fb-body{font-size:14.5px;color:#3a3a3a;}
+  .fb-kpi{font-size:12.5px;color:var(--muted);margin-top:8px;}
+  .quote{margin-top:14px;background:linear-gradient(135deg,#fff,#fbf6e8);border:1px dashed var(--gold);border-radius:12px;padding:14px 16px;position:relative;}
+  .quote .q{font-size:14.5px;color:var(--navy);font-style:italic;}
+  .quote .src{font-size:12px;color:var(--gold);text-align:right;margin-top:6px;font-weight:700;}
+  .quote .badge{position:absolute;top:-10px;left:14px;background:var(--gold);color:#3a2c08;font-size:11px;font-weight:800;padding:3px 10px;border-radius:999px;}
+  /* meters */
+  .meters{display:flex;gap:14px;margin:18px 0;flex-wrap:wrap;}
+  .meter{flex:1;min-width:150px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;}
+  .meter .lab{font-size:12.5px;color:var(--muted);}
+  .meter .val{font-size:22px;font-weight:800;color:var(--navy);}
+  .bar{height:8px;border-radius:6px;background:#eee;margin-top:8px;overflow:hidden;}
+  .bar > i{display:block;height:100%;border-radius:6px;transition:width .5s;}
+  /* End report */
+  .report{background:#fff;border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:var(--shadow);}
+  .report h2{margin:0 0 4px;color:var(--navy);}
+  .level-badge{display:inline-block;background:linear-gradient(135deg,var(--navy),var(--navy2));color:var(--gold2);font-weight:800;padding:8px 18px;border-radius:999px;font-size:15px;margin:10px 0 18px;}
+  .dim-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0 20px;}
+  .dim{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--soft);}
+  .dim b{color:var(--navy);} .dim .d{font-size:13px;color:var(--muted);}
+  .summary{background:var(--soft);border-radius:12px;padding:16px;font-size:14.5px;color:#3a3a3a;}
+  .coll{margin-top:18px;}
+  .coll h3{color:var(--navy);font-size:16px;margin-bottom:10px;}
+  .coll-grid{display:flex;flex-wrap:wrap;gap:10px;}
+  .qcard{width:170px;background:linear-gradient(135deg,#fff,#fbf6e8);border:1px dashed var(--gold);border-radius:12px;padding:12px 13px;font-size:13px;color:var(--navy);font-style:italic;position:relative;}
+  .qcard .n{position:absolute;top:-9px;left:12px;background:var(--gold);color:#3a2c08;font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;font-style:normal;}
+  .footer-note{font-size:12px;color:var(--muted);text-align:center;margin-top:26px;}
+  .replay{margin-top:8px;}
+  @media(max-width:640px){
+    .dim-grid{grid-template-columns:1fr;}
+    .hero h1{font-size:22px; line-height:1.3;}
+    .hero{padding:24px 18px;}
+    .card{padding:18px 16px 16px;}
+    .wrap{padding:12px 12px 48px;}
+    .topbar{margin-bottom:10px;}
+    .brand b{font-size:16px;}
+    .question{font-size:16px;}
+    .situation{font-size:14px; padding:12px 12px;}
+    .opt{padding:12px 12px; font-size:14px; -webkit-tap-highlight-color:transparent;}
+    .meters{gap:8px; margin:12px 0;}
+    .meter{min-width:0; padding:10px 10px;}
+    .meter .val{font-size:18px;}
+    .qcard{width:100%; max-width:100%;}
+    .coll-grid{display:grid; grid-template-columns:1fr; gap:10px;}
+    .btn{padding:12px 18px; font-size:14.5px; min-height:44px;}
+    .btn-row{gap:10px;}
+    .progress-pill{font-size:11px; padding:5px 10px; white-space:nowrap;}
+  }
+  /* WeChat / iOS safe area + touch */
+  html,body{height:100%; -webkit-text-size-adjust:100%; text-size-adjust:100%;}
+  body{
+    -webkit-tap-highlight-color:transparent;
+    overscroll-behavior-y:contain;
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  .opt, .btn{
+    -webkit-user-select:none; user-select:none;
+    touch-action:manipulation;
+  }
+  .opt:active{background:#fff8e6; border-color:var(--gold);}
+  .btn:active{transform:scale(.98); opacity:.92;}
+  .btn-primary:hover{transform:none;}
+  .opt:hover{transform:none;}
+  #meters{position:sticky; bottom:0; z-index:5; padding:8px 0 4px; background:linear-gradient(180deg,transparent, #eef1f6 28%);}
+  .wx-tip{
+    display:none; position:fixed; inset:0; z-index:9999;
+    background:rgba(0,0,0,.72); color:#fff; text-align:center;
+    padding:28px 20px; box-sizing:border-box;
+  }
+  .wx-tip.show{display:flex; flex-direction:column; align-items:center; justify-content:flex-start;}
+  .wx-tip .arrow{font-size:42px; line-height:1; margin:0 0 8px auto; padding-right:18px; color:var(--gold2);}
+  .wx-tip p{margin:6px 0; font-size:15px; max-width:280px; line-height:1.6;}
+  .wx-tip .btn{margin-top:22px;}
+  .share-bar{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;}
+  .share-bar .btn{flex:1; min-width:120px;}
+  .file-hint{
+    display:none; background:#fff5e9; border:1px solid #f3d6ad; color:#8a4b12;
+    border-radius:12px; padding:12px 14px; font-size:13px; margin-bottom:12px; line-height:1.55;
+  }
+  .file-hint.show{display:block;}
+</style>
+</head>
+<body>
+<!-- 微信右上角分享引导蒙层 -->
+<div class="wx-tip" id="wxTip" onclick="hideWxTip()">
+  <div class="arrow">↗</div>
+  <p><b>点击右上角 ···</b></p>
+  <p>选择「发送给朋友」或「分享到朋友圈」</p>
+  <button class="btn btn-primary" type="button" onclick="hideWxTip();event.stopPropagation();">知道了</button>
+</div>
+
+<div class="wrap">
+  <div class="file-hint" id="fileHint">
+    <b>提示：</b>微信无法直接打开本机 HTML 文件。请把本页面部署到 <b>HTTPS</b> 域名后，用链接在微信里打开；或用电脑起本地服务后手机扫码访问。
+  </div>
+  <div class="topbar">
+    <div class="logo">领</div>
+    <div class="brand"><b>领导力修炼局</b><span>从管理者到领导者 · 授权与激励沙盘</span></div>
+    <div class="progress-pill" id="progPill">第 0 / 0 关</div>
+  </div>
+
+  <!-- START -->
+  <section class="screen active" id="start">
+    <div class="hero">
+      <div class="deco"></div>
+      <div class="sub">MANAGEMENT → LEADERSHIP</div>
+      <h1>领导力修炼局</h1>
+      <p>你刚被提拔为团队负责人。摆在你面前的，不是 KPI，而是一个个活生生的管理现场——要不要授权？怎么激励？关键时刻扛不扛得住后果？</p>
+      <p>这是一款基于《从管理者到领导者》《有效授权与员工激励》两套课件的<b>卡牌式情景决策游戏</b>。每一关都是一张"情景卡"，你的每个选择都会被换算成<b>领导力值、团队合力、追随者士气</b>三项指标，并在通关后揭示你抵达的<b>领导力境界</b>。</p>
+      <div class="chips">
+        <span class="chip">以身作则</span><span class="chip">共启愿景</span><span class="chip">挑战流程</span>
+        <span class="chip">灌能他人</span><span class="chip">有效决策</span><span class="chip">把猴子关进牢笼</span>
+        <span class="chip">YCYA承诺系统</span><span class="chip">GROW教练</span><span class="chip">马斯洛激励</span>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" type="button" onclick="startGame()">开始修炼 ▶</button>
+        <button class="btn btn-ghost" type="button" onclick="showRules()">游戏目标 / 计分规则</button>
+      </div>
+      <div class="share-bar">
+        <button class="btn btn-ghost" type="button" onclick="shareGame()">分享给同事</button>
+        <button class="btn btn-ghost" type="button" onclick="copyLink()">复制链接</button>
+      </div>
+    </div>
+    <div class="footer-note">单人自测 · 微信内打开即可交互 · 也可用于内训分组竞答</div>
+  </section>
+
+  <!-- RULES -->
+  <section class="screen" id="rules">
+    <div class="card">
+      <div class="card-head"><span class="tag t-lead">规则</span><b style="color:var(--navy)">怎么玩</b></div>
+      <p style="font-size:14.5px;color:#3a3a3a"><b>目标：</b>在 34 张情景卡中持续做出符合领导力原则的决策，最大化三项指标，并尽量收集"领导箴言卡"。</p>
+      <p style="font-size:14.5px;color:#3a3a3a"><b>流程：</b>每关抽一张情景卡 → 阅读情境与问题 → 从 2–4 个行动中选一个 → 系统当即给出讲解（引用课件框架）与指标增减 → 选对最佳项可收集一张箴言卡 → 进入下一张。</p>
+      <p style="font-size:14.5px;color:#3a3a3a"><b>三项指标：</b><br>
+      · <b>领导力值</b>——你的决策质量与担当；<br>
+      · <b>团队合力</b>——合力 = 领导者能力 + 追随者能力 − 阻力；<br>
+      · <b>追随者士气</b>——被激励、被赋能的程度。</p>
+      <p style="font-size:14.5px;color:#3a3a3a"><b>结局 · 领导力五种境界：</b>根据综合正确率，你将从低到高抵达 权力 → 人际关系 → 结果 → 复制 → <b>尊重</b> 五重境界之一。</p>
+      <div class="btn-row">
+        <button class="btn btn-primary" type="button" onclick="startGame()">开始修炼 ▶</button>
+        <button class="btn btn-ghost" type="button" onclick="show('start')">返回</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- GAME -->
+  <section class="screen" id="game">
+    <div class="card" id="cardBox"><!-- injected --></div>
+    <div class="meters" id="meters"><!-- injected --></div>
+  </section>
+
+  <!-- END -->
+  <section class="screen" id="end">
+    <div class="report" id="reportBox"><!-- injected --></div>
+    <div class="btn-row replay">
+      <button class="btn btn-primary" type="button" onclick="restart()">再玩一次 ↻</button>
+      <button class="btn btn-ghost" type="button" onclick="show('start')">回到首页</button>
+      <button class="btn btn-ghost" type="button" onclick="shareGame()">分享结果</button>
+    </div>
+  </section>
+</div>
+
+<script>
+/* ====== 微信 / 移动端辅助 ====== */
+function isWeChat(){
+  return /MicroMessenger/i.test(navigator.userAgent||'');
+}
+function isFileProtocol(){
+  return location.protocol === 'file:';
+}
+function hideWxTip(){
+  var el=document.getElementById('wxTip');
+  if(el) el.classList.remove('show');
+}
+function showWxTip(){
+  var el=document.getElementById('wxTip');
+  if(el) el.classList.add('show');
+}
+function shareGame(){
+  if(isWeChat()){
+    showWxTip();
+    return;
+  }
+  var title='领导力修炼局 · 情景决策卡牌';
+  var text='从管理者到领导者 · 授权与激励沙盘，测测你的领导力境界';
+  var url=location.href;
+  if(navigator.share){
+    navigator.share({title:title, text:text, url:url}).catch(function(){});
+  } else {
+    copyLink();
+  }
+}
+function copyLink(){
+  var url=location.href;
+  function ok(){ alert('链接已复制，可粘贴到微信发给同事'); }
+  function fail(){ prompt('请长按复制链接：', url); }
+  if(navigator.clipboard && navigator.clipboard.writeText && !isFileProtocol()){
+    navigator.clipboard.writeText(url).then(ok).catch(fail);
+  } else {
+    try{
+      var ta=document.createElement('textarea');
+      ta.value=url; ta.setAttribute('readonly','');
+      ta.style.position='fixed'; ta.style.left='-9999px';
+      document.body.appendChild(ta); ta.select();
+      var done=document.execCommand('copy');
+      document.body.removeChild(ta);
+      if(done) ok(); else fail();
+    }catch(e){ fail(); }
+  }
+}
+var lastTouchEnd=0;
+document.addEventListener('touchend', function(e){
+  var now=Date.now();
+  if(now-lastTouchEnd<=300){ e.preventDefault(); }
+  lastTouchEnd=now;
+}, {passive:false});
+document.addEventListener('DOMContentLoaded', function(){
+  if(isFileProtocol()){
+    var h=document.getElementById('fileHint');
+    if(h) h.classList.add('show');
+  }
+});
+
+/* ====== 情景卡数据（基于两套课件） ====== */
+const SCEN = [
+/* ---------- A. 从管理者到领导者 ---------- */
+{ch:"lead",tag:"领导力·合力",title:"合力公式",
+ sit:"你接手新团队，业务能手小李能力很强，却常与你意见相左，会议上一言不合就抬杠。",
+ q:"要提升'团队合力'，你的第一步是什么？",
+ opts:[
+  {t:"用职位权威压服他，要求他服从决定",v:"bad",fb:"权威只能换来'权力境界'的服从，会增加阻力、削弱合力。合力 = 领导者能力 + 追随者能力 − 阻力。",d:{lead:-3,team:-4,morale:-2}},
+  {t:"花时间理解他的诉求，把他的能力纳入共同目标，让'合力'做加法",v:"best",fb:"正确！领导力是合力：领导者能力 + 追随者能力 − 阻力。把高手的能力对接到共同目标，合力最大化。",d:{lead:5,team:6,morale:3},quote:"发现一个领导者很简单，就看他身边有没有心甘情愿的追随者。——德鲁克"},
+  {t:"把他调离核心项目，省得添乱",v:"wrong",fb:"放弃追随者能力等于主动削弱合力，是典型的'管理思维'而非'领导思维'。",d:{lead:-2,team:-3,morale:-1}}
+ ]},
+{ch:"lead",tag:"领导力·角色",title:"管理与领导（科特）",
+ sit:"季度目标未达成，团队士气低落。作为新晋负责人，你面临选择。",
+ q:"与'管理者'最不同的'领导者'做法是什么？",
+ opts:[
+  {t:"重新制定更细的计划和预算表，加强过程管控",v:"wrong",fb:"这属于'管理'：计划预算、组织配置、控制解决问题。它必要，但不是领导。",d:{lead:-1,team:-1,morale:-1}},
+  {t:"确定新方向，整合相关者，激励并鼓舞团队重新出发",v:"best",fb:"正确！科特指出：领导 = 确定方向 + 整合相关者 + 激励鼓舞；管理 = 计划预算 + 组织配置 + 控制解决。",d:{lead:5,team:4,morale:5},quote:"领导是确定方向、整合相关者、激励和鼓舞。——约翰·科特《变革的力量》"},
+  {t:"每日追责，谁没达标罚谁",v:"bad",fb:"这是'控制并解决问题'的管理动作，且用罚压制，士气与合力双输。",d:{lead:-2,team:-3,morale:-4}}
+ ]},
+{ch:"lead",tag:"AI时代·三把锁",title:"AI拿不走的活",
+ sit:"公司全面引入 AI，你发现大量报表、周报、翻译工作 AI 都能代劳。",
+ q:"以下哪类活儿，你应该牢牢攥在自己手里？",
+ opts:[
+  {t:"所有重复性报表与数据整理",v:"wrong",fb:"这类'确定性工作'正被 AI 取代，管理岗'专家化'，不该耗费你的精力。",d:{lead:-1,team:0,morale:0}},
+  {t:"隐性知识活、复杂判断活、责任承担活——这三把锁 AI 打不开",v:"best",fb:"正确！AI 拿不走的活：①隐性知识（经验没上网）②复杂判断（跨域整合、变量太多）③责任承担（为结果买单的是你）。",d:{lead:6,team:3,morale:2},quote:"AI 出了错主意，被开除的不是 AI，是你。——三把锁"},
+  {t:"把决策权也完全交给 AI",v:"bad",fb:"决策可参考 AI，但责任必须由人承担。把责任外包给 AI 是领导者的失职。",d:{lead:-4,team:-2,morale:-2}}
+ ]},
+{ch:"lead",tag:"领导力·五境界",title:"五种境界",
+ sit:"团队目前服从你，只因为你是上级任命的负责人。",
+ q:"你想从'权力'境界迈向更高层，下一步应追求？",
+ opts:[
+  {t:"维持权力服从就好，听话就行",v:"wrong",fb:"这是最低层'权力境界'。靠权威让人服从，凝聚力最弱。",d:{lead:-1,team:-2,morale:-2}},
+  {t:"用结果和付出赢得拥戴，再到让人因你的人格魅力而自愿追随",v:"best",fb:"正确！五境界由低到高：权力→人际关系→结果→复制→尊重。靠人格魅力让他人心甘情愿追随，是最高境界。",d:{lead:5,team:5,morale:5},quote:"尊重——员工因为你的人格魅力和所代表的形象风范而拥戴你。——领导力五境界"},
+  {t:"多搞人际关系、吃吃喝喝拉近感情",v:"wrong",fb:"这停在'人际关系'层，低于'结果'与'复制'。关系是基础，不是终点。",d:{lead:1,team:2,morale:1}}
+ ]},
+{ch:"lead",tag:"领导力·以身作则",title:"以身作则",
+ sit:"你要求团队'守时、诚信'，但自己常临时改会、开会迟到。",
+ q:"'以身作则'的核心是什么？",
+ opts:[
+  {t:"只要制度严，别人自然会守时",v:"wrong",fb:"没有以身作则，制度只是墙上的字。员工看的是你做不做，不是你说不说。",d:{lead:-2,team:-2,morale:-3}},
+  {t:"言：明确自己的价值观；行：让行动与共同价值观一致，为他人树立榜样",v:"best",fb:"正确！以身作则 = 言（明确价值观、找到心声）+ 行（行动与价值观一致、树立榜样）。",d:{lead:5,team:3,morale:4},quote:"使行动与共同的价值观保持一致，为他人树立榜样。——以身作则"},
+  {t:"用罚款惩罚不守时的人",v:"wrong",fb:"严于律人、宽于律己，恰恰破坏'以身作则'的信誉基石。",d:{lead:-1,team:-2,morale:-3}}
+ ]},
+{ch:"lead",tag:"领导力·共启愿景",title:"共启愿景",
+ sit:"团队对未来迷茫，每天只盯着 KPI 数字，毫无干劲。",
+ q:"你如何'共启愿景'？",
+ opts:[
+  {t:"把老板给的年度 KPI 再强调一遍",v:"wrong",fb:"KPI 是管控工具，不是愿景。愿景要面向未来、为共同利益。",d:{lead:-1,team:-1,morale:-1}},
+  {t:"描绘令人激动的共同愿景，感召他人为共同愿望奋斗",v:"best",fb:"正确！共启愿景 = 展望未来令人激动的可能 + 描绘共同愿景感召他人。共同愿景五要素：理想、独特、形象、面向未来、共同利益。",d:{lead:5,team:5,morale:4},quote:"愿景是为了共同利益而对未来进行的一个理想而独特的展望。——共启愿景"},
+  {t:"多组织几次团建吃饭活跃气氛",v:"wrong",fb:"团建能拉感情，但替代不了'面向未来、共同利益'的愿景感召。",d:{lead:1,team:1,morale:1}}
+ ]},
+{ch:"lead",tag:"领导力·挑战流程",title:"挑战流程",
+ sit:"流程僵化多年，团队创新停滞，大家都在'按老办法走'。",
+ q:"'挑战流程'的第一步应该是什么？",
+ opts:[
+  {t:"直接下命令推行改革",v:"wrong",fb:"自上而下强推容易引发抵触，也未先'猎寻改进机会'。",d:{lead:-1,team:-2,morale:-1}},
+  {t:"猎寻改进机会，从外部获取创新方法，小步尝试冒险、从实践中学习",v:"best",fb:"正确！挑战流程 = 捕捉创意、从外部获取创新方法猎寻机会 + 尝试冒险、用小成功从实践学习。",d:{lead:5,team:4,morale:3},quote:"进行尝试和冒险，不断取得小小的成功，从实践中学习。——挑战流程"},
+  {t:"等总部发新的流程文件再动",v:"wrong",fb:"被动等待等于放弃领导者的'挑战流程'职责。",d:{lead:-2,team:-1,morale:-2}}
+ ]},
+{ch:"lead",tag:"领导力·灌能他人",title:"灌能他人",
+ sit:"下属小赵凡事等你给答案，缺乏主动性，成长缓慢。",
+ q:"要'灌能他人'，你应该？",
+ opts:[
+  {t:"每件事都替他拿主意，确保不出错",v:"wrong",fb:"包办代替会削弱他人实力，与'灌能'背道而驰。",d:{lead:-2,team:-3,morale:-2}},
+  {t:"建立信任、增进关系，增强其自主意识与发展能力",v:"best",fb:"正确！灌能他人 = 通过建立信任增进协作 + 通过增强自主意识和发展能力来增强他人实力。",d:{lead:4,team:5,morale:4},quote:"通过增强自主意识和发展能力来增强他人的实力。——灌能他人"},
+  {t:"少管他，让他自生自灭",v:"wrong",fb:"放任不是赋能。灌能需要信任，也需要培养与反馈。",d:{lead:-1,team:-2,morale:-2}}
+ ]},
+{ch:"lead",tag:"领导力·有效决策",title:"有效决策",
+ sit:"一个关键业务决策，AI 给出了看上去不错的方案。",
+ q:"作为领导者，正确态度是？",
+ opts:[
+  {t:"直接采用 AI 方案，省事又高效",v:"bad",fb:"决策可参考 AI，但责任必须由人承担。把责任外包是失职。",d:{lead:-4,team:-2,morale:-2}},
+  {t:"参考 AI，但由人做伦理判断与价值排序，并为后果买单",v:"best",fb:"正确！决策前三大关键：战略吻合、人事在前、先算后做；决策可以参考 AI，但责任必须由人承担。",d:{lead:6,team:3,morale:3},quote:"人之所以为人，是因为能为后果买单。——有效决策"},
+  {t:"完全不参考 AI，全凭直觉拍板",v:"wrong",fb:"拒绝借助工具是浪费。 AI 可作参谋，关键在'人担责'。",d:{lead:0,team:0,morale:0}}
+ ]},
+{ch:"lead",tag:"领导力·健康组织",title:"一流组织五问",
+ sit:"团队里没人敢提风险想法，怕被嘲笑'想多了'。",
+ q:"对应'一流组织的 5 个核心问题'，你优先建设什么？",
+ opts:[
+  {t:"更强的绩效考核，逼大家多发言",v:"wrong",fb:"考核压力反而压制心理安全感。",d:{lead:-1,team:-2,morale:-2}},
+  {t:"心理安全感：冒险不困窘、彼此相挺做到高品质",v:"best",fb:"正确！五问之首：团队打算冒风险时，不会觉得困窘为难？健康组织是最大竞争优势。",d:{lead:4,team:6,morale:4},quote:"当团队打算冒一个风险时，我们不会觉得困窘为难？。——一流组织五问"},
+  {t:"增加每周例会数量",v:"wrong",fb:"更多会议不解决心理安全感问题。",d:{lead:0,team:-1,morale:-1}}
+ ]},
+
+/* ---------- B. 有效授权 ---------- */
+{ch:"auth",tag:"授权·猴子理论",title:"把猴子关进牢笼",
+ sit:"下属跑来：'老大，这个难搞的客户又投诉了，您看怎么办？'话音刚落，问题就抛到了你桌上。",
+ q:"你应该？",
+ opts:[
+  {t:"接过来自己解决，毕竟你更有经验",v:"bad",fb:"猴子跳到了你背上！'把猴子关进牢笼'——责任要留在下属背上，否则你一人救火、他永不成长。",d:{lead:-4,team:-3,morale:-2}},
+  {t:"把猴子留在他背上：引导他自己提方案，你只做把关",v:"best",fb:"正确！猴子理论：下属的问题是他背上的'猴子'。交办≠接锅。引导他自己找方案，责任归位。",d:{lead:5,team:5,morale:3},quote:"猴子要么被喂养，要么被杀死，因为每个人的精力都是有限的。——猴子理论"},
+  {t:"直接转手丢给别的部门",v:"wrong",fb:"甩锅不等于授权，问题仍在组织里空转。",d:{lead:-2,team:-2,morale:-1}}
+ ]},
+{ch:"auth",tag:"授权·心理",title:"不愿授权的四心理",
+ sit:"你反思自己为什么总是不放权，发现几个念头反复出现。",
+ q:"以下哪项属于'管理者不愿交办工作的 4 个心理'？",
+ opts:[
+  {t:"担心下属做得比自己强、觉得自己做结果更好、怕加重负担被讨厌、认为自己做更快",v:"best",fb:"正确！四心理全中：①怕下属比自己强②觉得自己做更好③怕加重负担被讨厌④觉得自己做更快更省事。认清它们是放权的第一步。",d:{lead:5,team:3,morale:2},quote:"管理者不愿意交办工作的4个心理：怕下属更强、觉得自己更好、怕被讨厌、觉得自己更快。——授权"},
+  {t:"只是因为下属能力真的不行",v:"wrong",fb:"把不放权归因于'别人不行'，往往是四心理的掩饰。",d:{lead:-1,team:-1,morale:-1}},
+  {t:"完全是公司制度不允许",v:"wrong",fb:"制度通常并非主因，心理障碍才是。",d:{lead:-1,team:0,morale:0}}
+ ]},
+{ch:"auth",tag:"授权·五个凡是",title:"五个凡是",
+ sit:"一项工作你交出去了，但中途没检核，结果严重偏离预期。",
+ q:"这一连串缺了'五个凡是'的哪一环？",
+ opts:[
+  {t:"凡是工作必有计划（你没做计划）",v:"wrong",fb:"计划其实有，问题出在后续闭环。",d:{lead:0,team:-1,morale:0}},
+  {t:"凡是责任必有检查——你缺了'检查'这一环",v:"best",fb:"正确！五个凡是：工作→计划→结果→责任→检查→奖罚。交了任务没检核，责任就悬空了。",d:{lead:5,team:4,morale:2},quote:"凡是工作必有计划；凡是计划必有结果；凡是结果必有责任；凡是责任必有检查；凡是检查必有奖罚。——五个凡是"},
+  {t:"凡是检查必有奖罚（你没罚人）",v:"wrong",fb:"奖罚在前，但前提是先有'检查'。你连检查都没做。",d:{lead:1,team:0,morale:0}}
+ ]},
+{ch:"auth",tag:"授权·流程六坑",title:"授权流程",
+ sit:"你交办时说：'这件事你照我说的去做，别问为什么。'",
+ q:"这犯了有效授权流程里的哪条大忌？",
+ opts:[
+  {t:"颐指气使：用'照我指示去做'的态度委托",v:"best",fb:"正确！六坑之一'颐指气使'。委托要站在受托者立场设想，而非命令式倒活。",d:{lead:4,team:3,morale:2},quote:"①颐指气使 ②缺乏通盘考量 ③未能充分授权 ④交代后不闻不问 ⑤指令模糊 ⑥时间紧迫。——授权六坑"},
+  {t:"指令模糊（没说目标）",v:"wrong",fb:"你说清了'照我做'，指令不算模糊，但态度错了。",d:{lead:1,team:0,morale:0}},
+  {t:"时间紧迫（没给时间）",v:"wrong",fb:"这里的关键问题是态度而非时间。",d:{lead:0,team:0,morale:0}}
+ ]},
+{ch:"auth",tag:"授权·模式",title:"授权模式",
+ sit:"你想培养下属的独立性，采用更民主的授权方式。",
+ q:"在从'独裁控制'到'民主管理'的七种模式中，培养型授权应靠近哪一端？",
+ opts:[
+  {t:"管理者决定并宣布（独裁端）",v:"wrong",fb:"这是最集权的模式，不利于培养。",d:{lead:-1,team:-2,morale:-2}},
+  {t:"管理者允许员工在权限范围内自行做决定（民主端）",v:"best",fb:"正确！民主管理端：员工拥有更多自由、在权限内自主决策。这是培养型人才的做法。",d:{lead:5,team:4,morale:4},quote:"管理者允许员工在权限范围内做决定。——授权模式（民主端）"},
+  {t:"管理者推销自己的观点",v:"wrong",fb:"这仍在半集权区，下属只是被动接受。",d:{lead:1,team:0,morale:0}}
+ ]},
+{ch:"auth",tag:"授权·三要素",title:"授权三要素",
+ sit:"你把任务交给了小王，可他到处碰壁——因为他根本没权调用所需资源。",
+ q:"问题出在'职责 / 职权 / 责任'三要素中的哪处？",
+ opts:[
+  {t:"只交了职责，忘了授'职权'",v:"best",fb:"正确！三要素：职责（做什么）+ 职权（决定自由度）+ 责任。常犯的错：把工作交出去，却忘了给必需权力。",d:{lead:5,team:4,morale:3},quote:"您有没有将工作交给下属了，却忘记了将必需的权力也交给他？。——授权三要素"},
+  {t:"责任不清",v:"wrong",fb:"责任通常明确了，卡住他的是'没权'。",d:{lead:1,team:0,morale:0}},
+  {t:"人选不对",v:"wrong",fb:"人选未必错，是授权结构缺了职权。",d:{lead:0,team:0,morale:0}}
+ ]},
+{ch:"auth",tag:"授权·When",title:"何时授权",
+ sit:"一项未来会重复出现的工作，你犹豫要不要现在就交出去，因为'教他要花时间'。",
+ q:"正确判断是？",
+ opts:[
+  {t:"现在就授权：教这一次虽费时，但未来重复出现时你都省了，还培养了人",v:"best",fb:"正确！When：自己动手只省这一次；若工作未来重复，更应尽早交办，还能给下属发展机会。",d:{lead:5,team:5,morale:3},quote:"自己动手做确实比教员工怎么做要省时间，但是也只省这一次。——何时授权"},
+  {t:"自己一直做更快，别交了",v:"wrong",fb:"短视。你永远在救火，团队永远长不大。",d:{lead:-2,team:-3,morale:-2}},
+  {t:"永远不授权，这是核心机密",v:"wrong",fb:"除非真'非你不可'，否则这是不愿授权的心理作祟。",d:{lead:-2,team:-2,morale:-1}}
+ ]},
+{ch:"auth",tag:"授权·科学步骤",title:"科学授权四步",
+ sit:"你刚把任务交代完，就说'做完告诉我'，然后去忙别的，直到截止日才看结果。",
+ q:"你跳过了科学授权四步中的哪一步？",
+ opts:[
+  {t:"检查进展（检查阶段）",v:"best",fb:"正确！四步：打好基础(计划)→下达指令(实施)→检查进展(检查)→回顾总结(改善)。你缺了'检查进展'。",d:{lead:4,team:3,morale:2},quote:"1.打好基础 2.下达指令 3.检查进展 4.回顾总结。——科学授权步骤"},
+  {t:"下达指令（实施）",v:"wrong",fb:"指令你下了，只是没跟进。",d:{lead:0,team:0,morale:0}},
+  {t:"回顾总结（改善）",v:"wrong",fb:"总结在最后，但在此之前你连'检查'都跳了。",d:{lead:0,team:0,morale:0}}
+ ]},
+{ch:"auth",tag:"授权·监督",title:"会监督才敢授权",
+ sit:"有句话在管理圈很有名：'人们只会做你检查的事情。'",
+ q:"你应如何理解'授权后的监督'？",
+ opts:[
+  {t:"授权多少，取决于你能监督多少；监督让'猴子进化'",v:"best",fb:"正确！监督方式越多，就能授权越多。你的检查就是让猴子进化；想要业绩就让别人超越你。",d:{lead:5,team:4,morale:3},quote:"授权不存在授权多少的问题，只存在你能够监督多少的问题。——监督检查"},
+  {t:"授权后就别管，信任至上",v:"wrong",fb:"放任不是信任。授权不表示放任，一开始要略频繁检查。",d:{lead:-2,team:-2,morale:-1}},
+  {t:"事必躬亲才保险",v:"wrong",fb:"那是回到'一人救火'，不是领导。",d:{lead:-2,team:-2,morale:-2}}
+ ]},
+{ch:"auth",tag:"授权·YCYA",title:"YCYA承诺系统",
+ sit:"下属接了任务后没回音，你也没跟。截止日他才说：'没做完，因为……'",
+ q:"用 YCYA 承诺管理系统看，缺失了哪几环？",
+ opts:[
+  {t:"缺 Y(承诺) 与 Y(汇报)，也少了 C(检查)",v:"best",fb:"正确！YCYA：Y承诺→C检查→Y汇报→A奖惩。他没承诺、你没检查、他没汇报，闭环断裂。",d:{lead:5,team:4,morale:2},quote:"Y承诺 C检查 Y汇报 A奖惩，奖惩不过夜。——YCYA承诺系统"},
+  {t:"只缺 A(奖惩)",v:"wrong",fb:"奖惩是最后一步，前面三环早就空了。",d:{lead:1,team:0,morale:0}},
+  {t:"系统本身没用",v:"wrong",fb:"YCYA 正是为解决'无回音'而生，问题在执行不到位。",d:{lead:-1,team:-1,morale:0}}
+ ]},
+{ch:"auth",tag:"授权·交付五件事",title:"交付工作五件事",
+ sit:"你给下属派活时，最容易被忽略、却最该先定的，是哪一项？",
+ opts:[
+  {t:"事前决定沟通规则（何时汇报、怎么求助）",v:"best",fb:"正确！交付五件事之首：事前决定沟通规则。其余为教导/教练分用、主管角色明确、说清可用人财物、紧急时主管强行介入。",d:{lead:4,team:4,morale:3},quote:"事前决定沟通规则；教导和教练视状况分别使用；主管角色明确；说清资源；紧急时强行介入。——交付五件事"},
+  {t:"给他发一笔奖金再开工",v:"wrong",fb:"奖金不是交付前的事，且未必是他想要的。",d:{lead:0,team:0,morale:0}},
+  {t:"先批评他以往表现",v:"wrong",fb:"与交付无关，还伤士气。",d:{lead:-1,team:-1,morale:-2}}
+ ]},
+
+/* ---------- C. 员工激励 ---------- */
+{ch:"mot",tag:"激励·信号",title:"士气低落信号",
+ sit:"老周最近总是推迟工作、午餐时间拖很长、常抱怨鸡毛蒜皮的琐事。",
+ q:"这是？",
+ opts:[
+  {t:"需要激励的信号",v:"best",fb:"正确！信号包括：额外努力时不合作、不愿自动多做、常迟到、拖延、抱怨琐事、出问题怨别人等。",d:{lead:4,team:3,morale:4},quote:"工作无精打采、经常拖延、常抱怨琐事——这是需要激励的信号。——士气信号"},
+  {t:"单纯能力不足，需培训",v:"wrong",fb:"描述更指向'意愿'而非'能力'，先解决激励。",d:{lead:0,team:-1,morale:-1}},
+  {t:"纯属个人私事，与管理者无关",v:"wrong",fb:"士气信号就是管理者的预警，不能无视。",d:{lead:-1,team:-1,morale:-1}}
+ ]},
+{ch:"mot",tag:"激励·四公式",title:"行为四公式",
+ sit:"员工做对了你没反应，做错了你才骂。久而久之他发现：'不做也行'。",
+ q:"按行为心理学四公式，长期结果是？",
+ opts:[
+  {t:"做+好=继续做（正强化）长期缺失，他不再积极",v:"best",fb:"正确！做+好=继续做(正强化)；做+坏=逃避；不做+好=坐享其成；不做+坏=被迫做。你只在他错时反应，正强化缺失。",d:{lead:4,team:3,morale:5},quote:"做+好=继续做（正强化）；不做+好=不做了（坐享其成）。——行为四公式"},
+  {t:"他会因为怕骂而更努力",v:"wrong",fb:"怕骂只带来'不做+坏=只好做'的被动，且无正强化难持续。",d:{lead:0,team:-1,morale:-2}},
+  {t:"没有影响，员工都理性",v:"wrong",fb:"行为取决于周围给的反馈，这是操作性行为规律。",d:{lead:-1,team:-1,morale:-1}}
+ ]},
+{ch:"mot",tag:"激励·奖或罚",title:"奖还是罚（对事）",
+ sit:"创意设计岗的小美，需要激发创造力与想象力。",
+ q:"对她的工作，激励策略应是？",
+ opts:[
+  {t:"罚不如奖：多'戴高帽子'鼓励，让她兴奋积极去创造",v:"best",fb:"正确！对事：有创造性、需创造能力的工作，罚不如奖，多鼓励才能让她兴奋创造。",d:{lead:4,team:3,morale:5},quote:"对事：创造性工作，罚不如奖；目标明确、发挥空间小的工作，奖不如罚。——奖还是罚"},
+  {t:"严罚出错，错一次扣绩效",v:"wrong",fb:"创造性工作用罚会压制冒险与灵感，适得其反。",d:{lead:-1,team:-2,morale:-4}},
+  {t:"不奖不罚，靠自觉",v:"wrong",fb:"缺乏反馈，行为无方向。",d:{lead:0,team:0,morale:-1}}
+ ]},
+{ch:"mot",tag:"激励·马斯洛",title:"马斯洛需求",
+ sit:"骨干员工表达：'我想要成就感，希望被尊重、我的意见被采纳。'",
+ q:"对应马斯洛需求层，你应给？",
+ opts:[
+  {t:"高层次授权、让其做导师、工作有难度与挑战、意见被采纳",v:"best",fb:"正确！尊重需求给尊重感、自我实现给成就感：高层次的授权、创造工作价值、让意见开花结果、让他做导师。",d:{lead:5,team:4,morale:5},quote:"自我实现的需求：给他成就感——高层次授权、让他的意见能被采纳及开花结果、让他做导师。——马斯洛"},
+  {t:"只给他加薪",v:"wrong",fb:"加薪对应生理/安全层，对已达尊重/自我实现需求的人不够。",d:{lead:1,team:0,morale:1}},
+  {t:"多安排简单重复任务保稳定",v:"wrong",fb:"这反而剥夺挑战与成就感，违背其需求。",d:{lead:-2,team:-2,morale:-3}}
+ ]},
+{ch:"mot",tag:"激励·绿线",title:"放大绿线",
+ sit:"员工小吴周末逛商场，顺手帮公司客户解决了纠纷，自觉维护了公司风范。",
+ q:"你应？",
+ opts:[
+  {t:"放大绿线：树立为榜样、公开奖励这种风范行为",v:"best",fb:"正确！绿线与红线相反，是团队鼓励的正确行为。把它放大，让所有人向他学（如设'风范奖'）。",d:{lead:4,team:5,morale:5},quote:"放大绿线：把员工践行的精神风范行为放大，让所有员工向他学习。——绿线"},
+  {t:"视为多事，提醒他别管闲事",v:"wrong",fb:"压制正确行为，错失正能量放大机会。",d:{lead:-2,team:-2,morale:-3}},
+  {t:"扣他休息日，算加班",v:"wrong",fb:"惩罚性处理严重挫伤主动性。",d:{lead:-3,team:-3,morale:-4}}
+ ]},
+{ch:"mot",tag:"激励·表扬",title:"表扬四要素",
+ sit:"你表扬下属时习惯只说一句'干得不错，继续加油'。",
+ q:"更好的表扬应包含哪四要素？",
+ opts:[
+  {t:"关注过程、工作意义、纵揽全局、无私精神",v:"best",fb:"正确！表扬四要素：关注过程、工作意义、纵揽全局、无私精神。只夸结果太单薄。",d:{lead:4,team:3,morale:5},quote:"表扬员工的四个要素：关注过程、工作意义、纵揽全局、无私精神。——表扬四要素"},
+  {t:"只夸结果和数字",v:"wrong",fb:"缺了过程与意义，难触达内心。",d:{lead:1,team:0,morale:1}},
+  {t:"当众点名批评以示激励",v:"wrong",fb:"公开批评不是表扬，伤自尊。",d:{lead:-2,team:-2,morale:-3}}
+ ]},
+{ch:"mot",tag:"激励·奖励",title:"奖励三原则",
+ sit:"员工达成重要里程碑，你打算奖励。",
+ q:"最符合'奖励员工三原则'的做法是？",
+ opts:[
+  {t:"立刻给、重复给、给员工真正想要的",v:"best",fb:"正确！三原则：立刻给（及时）、重复给（强化）、给员工想要的（按需）。延迟到年底就弱化。",d:{lead:4,team:3,morale:5},quote:"奖励员工三原则：立刻给、重复给、给员工想要的。——奖励三原则"},
+  {t:"记下来，年底统一发奖金",v:"wrong",fb:"不及时，正强化效果大打折扣。",d:{lead:0,team:0,morale:-2}},
+  {t:"只发统一金额，人人一样",v:"wrong",fb:"未必是员工想要的，未体现'按需'。",d:{lead:1,team:0,morale:0}}
+ ]},
+{ch:"mot",tag:"激励·荣誉",title:"荣誉激励",
+ sit:"95 后员工小新对发奖金不太兴奋，却很在意'头衔'和成长。",
+ q:"更有效的激励是？",
+ opts:[
+  {t:"给'名份'（如技术专家头衔）与成长机会（大会、分享、探索权）",v:"best",fb:"正确！荣誉激励创新：名份（技术专家/领域负责人/布道师）+ 从给钱到给成长机会。新世代更看重身份认同。",d:{lead:4,team:4,morale:5},quote:"关键洞察：00后更看重'身份认同'而非单纯的物质奖励。——荣誉激励"},
+  {t:"加倍发奖金就好",v:"wrong",fb:"对他而言，身份与成长比钱更打动人。",d:{lead:1,team:0,morale:1}},
+  {t:"多开会打鸡血",v:"wrong",fb:"空喊口号不如给实在的名份与机会。",d:{lead:0,team:0,morale:0}}
+ ]},
+{ch:"mot",tag:"激励·三句话",title:"让干劲下滑的三句话",
+ sit:"下属来求助，你随口说：'这么点小事，自己动脑筋想。'",
+ q:"这句话？",
+ opts:[
+  {t:"正是'让干劲下滑的三句话'之一，会挫伤积极性",v:"best",fb:"正确！三句话：'给我打起精神来''好好努力''这么点小事自己动脑筋想'——都是反赋能话术。",d:{lead:-2,team:-2,morale:-4},quote:"让干劲下滑的三句话：给我打起精神来 / 好好努力 / 这么点小事自己动脑筋想。——三句话"},
+  {t:"是正确的赋能话术，培养独立性",v:"wrong",fb:"看似培养，实则推脱，伤士气。应用 GROW 引导。",d:{lead:-1,team:-1,morale:-3}},
+  {t:"无所谓，员工该抗压",v:"wrong",fb:"忽视话术对士气的摧毁。",d:{lead:-1,team:-1,morale:-2}}
+ ]},
+{ch:"mot",tag:"激励·GROW",title:"GROW教练",
+ sit:"下属遇瓶颈来找你，你作为教练式领导。",
+ q:"GROW 模型的第一步是？",
+ opts:[
+  {t:"Goal：帮他明确想要达成的目标，而非直接给答案",v:"best",fb:"正确！GROW：G目标→R现状→O方案→W意愿。教练不是给答案，而是引导下属自己找到答案。",d:{lead:5,team:4,morale:4},quote:"教练不是告诉答案，而是引导下属自己找到答案。——GROW模型"},
+  {t:"直接给解决方案最省事",v:"wrong",fb:"给答案剥夺了下属的成长，违背教练式领导。",d:{lead:-2,team:-2,morale:-2}},
+  {t:"先批评他能力不足",v:"wrong",fb:"批评打击意愿，与 GROW 的'强化意愿'相反。",d:{lead:-2,team:-2,morale:-3}}
+ ]},
+{ch:"mot",tag:"激励·容错",title:"容错尺度",
+ sit:"员工为提速尝试新方法，结果失败了，但过程有创新价值。",
+ q:"这属于哪类失败，你该如何？",
+ opts:[
+  {t:"探索性失败：大胆鼓励、复盘学习，包容创新的代价",v:"best",fb:"正确！容错：探索性失败（尝试新技术新方法）应鼓励复盘；过失性失败（疏忽违规）才问责。",d:{lead:5,team:4,morale:5},quote:"探索性失败：大胆鼓励，复盘学习——这是创新的代价，值得包容。——容错原则"},
+  {t:"重罚问责，杀一儆百",v:"wrong",fb:"那是过失性失败的处理，用在探索性上会扼杀创新。",d:{lead:-2,team:-3,morale:-4}},
+  {t:"当作没发生，掩盖过去",v:"wrong",fb:"不复盘就浪费了学习机会。",d:{lead:0,team:0,morale:0}}
+ ]},
+{ch:"mot",tag:"激励·三明治",title:"行为引导四步法",
+ sit:"员工第一次犯了错，你准备谈话。",
+ q:"按'辅导第1次、警告第2次、重罚第3次'，第一次该？",
+ opts:[
+  {t:"用三明治话术：肯定+指出行为+鼓励，且别问'为什么'",v:"best",fb:"正确！第1次辅导而非罚；三明治话术；且'千万不要问：为什么？'。第2次警告，第3次重罚。",d:{lead:5,team:3,morale:4},quote:"辅导第1次、警告第2次、重罚第3次。千万不要问：为什么？。——行为引导四步法"},
+  {t:"直接按重罚处理",v:"wrong",fb:"第一次就重罚，尺度失衡，寒了人心。",d:{lead:-2,team:-2,morale:-4}},
+  {t:"开口就问'你为什么要犯错'",v:"wrong",fb:"恰恰犯了'别问为什么'的大忌，易引发防御。",d:{lead:-1,team:-1,morale:-3}}
+ ]}
+];
+
+/* ====== 游戏状态 ====== */
+let idx=0, lead=50, team=50, morale=50, quotes=[], answered=false;
+const MAX=100;
+
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+
+function startGame(){
+  idx=0; lead=50; team=50; morale=50; quotes=[]; answered=false;
+  showScreen('game'); renderCard();
+}
+function restart(){ startGame(); }
+
+function clamp(v){return Math.max(0,Math.min(MAX,v));}
+
+function renderCard(){
+  answered=false;
+  document.getElementById('progPill').textContent = `第 ${idx+1} / ${SCEN.length} 关`;
+  const s=SCEN[idx];
+  const tagCls = s.ch==='lead'?'t-lead':(s.ch==='auth'?'t-auth':'t-mot');
+  let html=`<div class="card-head"><span class="tag ${tagCls}">${s.tag}</span><span class="qcount">${s.title}</span></div>`;
+  html+=`<div class="situation"><b>情景：</b>${s.sit}</div>`;
+  html+=`<div class="question">${s.q}</div>`;
+  html+=`<div class="options" id="opts">`;
+  s.opts.forEach((o,i)=>{
+    html+=`<button class="opt" onclick="choose(${i})"><span class="num">${String.fromCharCode(65+i)}</span><span>${o.t}</span></button>`;
+  });
+  html+=`</div><div class="feedback" id="fb"></div>`;
+  document.getElementById('cardBox').innerHTML=html;
+  renderMeters();
+  try{ window.scrollTo({top:0, behavior:'smooth'}); }catch(e){ window.scrollTo(0,0); }
+}
+
+function choose(i){
+  if(answered) return; answered=true;
+  const s=SCEN[idx]; const o=s.opts[i];
+  const fb=document.getElementById('fb');
+  let cls='fb-good', title='✓ 最佳选择';
+  if(o.v==='wrong'){cls='fb-warn';title='△ 有待改进';}
+  if(o.v==='bad'){cls='fb-bad';title='✕ 需警惕';}
+  if(o.v==='best'){cls='fb-good';title='✓ 最佳选择';}
+  // apply deltas
+  lead=clamp(lead+o.d.lead); team=clamp(team+o.d.team); morale=clamp(morale+o.d.morale);
+  let quoteHtml='';
+  if(o.v==='best' && o.quote){ quotes.push(o.quote); quoteHtml=`<div class="quote"><span class="badge">★ 箴言卡 +1</span><div class="q">“${o.quote.split('。——')[0]}”</div><div class="src">—— ${o.quote.split('。——')[1]||'领导力箴言'}</div></div>`; }
+  let kpi=`领导力值 ${o.d.lead>=0?'+':''}${o.d.lead} · 团队合力 ${o.d.team>=0?'+':''}${o.d.team} · 追随者士气 ${o.d.morale>=0?'+':''}${o.d.morale}`;
+  fb.className='feedback show '+cls;
+  fb.innerHTML=`<div class="fb-title">${title}</div><div class="fb-body">${o.fb}</div>${quoteHtml}<div class="fb-kpi">${kpi}</div>`;
+  // mark options
+  const optsEl=document.getElementById('opts').children;
+  for(let k=0;k<optsEl.length;k++){
+    optsEl[k].classList.add('locked');
+    if(k===i){ optsEl[k].classList.add(o.v==='best'?'correct':(o.v==='bad'?'wrong':'wrong')); }
+    else optsEl[k].classList.add('dim');
+  }
+  renderMeters();
+  // next button
+  const next=document.createElement('button');
+  next.type='button';
+  next.className='btn btn-primary'; next.style.marginTop='16px'; next.style.width='100%';
+  next.textContent = idx+1<SCEN.length ? '下一张 ▶' : '查看修炼报告 🏁';
+  next.onclick = ()=>{ idx++; idx<SCEN.length?renderCard():endGame(); };
+  fb.appendChild(next);
+  try{ fb.scrollIntoView({behavior:'smooth', block:'nearest'}); }catch(e){}
+}
+
+function renderMeters(){
+  const data=[['领导力值',lead,'var(--navy)'],['团队合力',team,'var(--teal)'],['追随者士气',morale,'var(--warn)']];
+  let html='';
+  data.forEach(d=>{
+    html+=`<div class="meter"><div class="lab">${d[0]}</div><div class="val">${d[1]}</div><div class="bar"><i style="width:${d[1]}%;background:${d[2]}"></i></div></div>`;
+  });
+  document.getElementById('meters').innerHTML=html;
+}
+
+function endGame(){
+  showScreen('end');
+  const avg=(lead+team+morale)/3;
+  let level, lvDesc;
+  if(avg>=85){level='尊重';lvDesc='员工因你的人格魅力与风范而心甘情愿追随——领导者的最高境界。';}
+  else if(avg>=72){level='复制';lvDesc='员工因你为他所付出的努力而拥戴你，你能复制出更多领导者。';}
+  else if(avg>=60){level='结果';lvDesc='员工因你为企业付出的努力而拥戴你，用结果说话。';}
+  else if(avg>=45){level='人际关系';lvDesc='员工因与你的融洽关系而拥戴你，关系基础已建立。';}
+  else {level='权力';lvDesc='员工因权威而服从你。要走向真正的影响力，还需修炼。';}
+
+  const dims=[
+    ['以身作则 / 共启愿景',(lead+team)/2],
+    ['授权与猴子管理',team],
+    ['激励与赋能',morale],
+    ['决策与担当',lead]
+  ];
+  let dimHtml='';
+  dims.forEach(d=>{
+    const pct=Math.round(d[1]);
+    dimHtml+=`<div class="dim"><b>${d[0]}</b><div class="d">得分 ${pct} / 100</div><div class="bar"><i style="width:${pct}%;background:var(--gold)"></i></div></div>`;
+  });
+
+  let collHtml='';
+  if(quotes.length){
+    quotes.forEach((q,i)=>{
+      const parts=q.split('。——'); const txt=parts[0]; const src=parts[1]||'领导力箴言';
+      collHtml+=`<div class="qcard"><span class="n">箴言 ${i+1}</span>“${txt}”<div style="text-align:right;color:var(--gold);font-weight:700;font-size:11px;margin-top:6px;font-style:normal">—— ${src}</div></div>`;
+    });
+  } else { collHtml='<p style="color:var(--muted);font-size:13px">本局未收集到箴言卡，多尝试最佳选项即可解锁。</p>'; }
+
+  document.getElementById('reportBox').innerHTML=`
+    <h2>🏁 领导力修炼报告</h2>
+    <div class="level-badge">你的境界：${level}</div>
+    <p style="color:#3a3a3a;font-size:14.5px">${lvDesc}</p>
+    <div class="dim-grid">${dimHtml}</div>
+    <div class="summary"><b>综合评分：</b>${Math.round(avg)} / 100 ｜ <b>箴言卡收集：</b>${quotes.length} / ${SCEN.length}
+    <br><b>建议：</b>${avg>=72?'你已具备领导者的核心素养，可在复杂判断与责任承担上继续精进。':(avg>=45?'夯实授权与激励的基本功，把"猴子"留在下属背上，多用正强化。':'从"安排活儿"转向"承担后果"，先练好授权流程与以身作则。')}</div>
+    <div class="coll"><h3>★ 你收集的「领导箴言卡」</h3><div class="coll-grid">${collHtml}</div></div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:14px;text-align:center">微信里点「分享结果」→ 右上角发送给同事一起修炼</p>
+  `;
+  try{ window.scrollTo({top:0, behavior:'smooth'}); }catch(e){ window.scrollTo(0,0); }
+}
+
+function showRules(){ showScreen('rules'); }
+// alias for buttons: show('start') -> showScreen('start')
+function show(id){ showScreen(id); }
+</script>
+</body>
+</html>
